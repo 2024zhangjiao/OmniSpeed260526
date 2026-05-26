@@ -1,48 +1,127 @@
-html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniSpeed - 聚合網路診斷工具</title>
+    <title>OmniSpeed Pro - 全功能网络资产审计与环境评估看板</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        .neon-glow { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+        .neon-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.6); }
+        .neon-green { text-shadow: 0 0 10px rgba(16, 185, 129, 0.6); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between antialiased">
 
-    <header class="p-4 border-b border-slate-800 flex justify-between items-center">
-        <h1 class="text-xl font-bold text-blue-400 neon-glow">🚀 OmniSpeed</h1>
-        <span class="text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded">v1.0 開源全功能版</span>
+    <header class="p-4 border-b border-slate-900 bg-slate-900/50 backdrop-blur flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center space-x-2">
+            <h1 class="text-xl font-black text-blue-500 neon-blue">🚀 OmniSpeed Pro</h1>
+            <span class="text-[10px] bg-blue-950 text-blue-400 px-2 py-0.5 rounded-full border border-blue-800/50 font-mono">v2.0 企业级审计版</span>
+        </div>
+        <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
+            <button id="node-cn" class="px-3 py-1 text-xs font-semibold rounded-lg transition bg-blue-600 text-white shadow">国内优化方案</button>
+            <button id="node-global" class="px-3 py-1 text-xs font-semibold rounded-lg transition text-slate-400 hover:text-white">海外跨境方案</button>
+        </div>
     </header>
 
-    <main class="flex-1 flex flex-col items-center justify-center p-6 space-y-8">
-        <div class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 text-center shadow-xl">
-            <h3 class="text-sm text-slate-400 uppercase tracking-wider mb-2">當前即時網速</h3>
-            <div class="text-5xl font-black text-white my-4"><span id="speed-value">0.0</span> <span class="text-xl text-blue-400">Mbps</span></div>
-            <button id="start-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-6 rounded-2xl transition duration-300 transform active:scale-95 shadow-lg shadow-blue-600/30">
-                開始一鍵測速
-            </button>
-        </div>
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="md:col-span-1 space-y-6">
+            <div class="bg-slate-900 border border-slate-800/80 rounded-3xl p-6 text-center shadow-2xl relative overflow-hidden group">
+                <div class="absolute -right-16 -top-16 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl group-hover:bg-blue-600/20 transition-all"></div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">当前测试速率</h3>
+                <div class="text-6xl font-black text-white my-4 tracking-tight"><span id="speed-value">0.0</span><span class="text-xl text-blue-500 font-medium ml-1">Mbps</span></div>
+                <button id="start-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 px-6 rounded-2xl transition duration-300 transform active:scale-[0.98] shadow-lg shadow-blue-600/20 text-sm">
+                    开始一键全网审计
+                </button>
+            </div>
 
-        <div class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 shadow-xl">
-            <h3 class="text-sm font-semibold text-slate-300 border-b border-slate-800 pb-2">🌐 核心網路指標診斷</h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/50">
-                    <div class="text-xs text-slate-500">網路延遲 (Ping)</div>
-                    <div id="ping-value" class="text-lg font-bold text-emerald-400">--</div>
-                </div>
-                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/50">
-                    <div class="text-xs text-slate-500">抖動 (Jitter)</div>
-                    <div id="jitter-value" class="text-lg font-bold text-amber-400">--</div>
+            <div class="bg-slate-900 border border-slate-800/80 rounded-3xl p-5 space-y-4 shadow-xl">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-2">⚡ 延迟与质量指标</h3>
+                <div class="grid grid-cols-2 gap-3 font-mono">
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/60">
+                        <div class="text-[11px] text-slate-500 mb-0.5">基础延时 (Ping)</div>
+                        <div id="ping-value" class="text-base font-bold text-emerald-400">--</div>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/60">
+                        <div class="text-[11px] text-slate-500 mb-0.5">网络抖动 (Jitter)</div>
+                        <div id="jitter-value" class="text-base font-bold text-amber-400">--</div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="md:col-span-2 space-y-6">
+            
+            <div class="bg-slate-900 border border-slate-800/80 rounded-3xl p-5 shadow-xl space-y-4">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center justify-between border-b border-slate-800 pb-2">
+                    <span>📡 公网资产身份特征 (Identity Assets)</span>
+                    <span id="current-node-tip" class="text-[10px] text-blue-400 font-mono">当前节点: 腾讯云/阿里云CDN</span>
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+                    <div class="flex justify-between p-2.5 bg-slate-950 rounded-lg border border-slate-800/40">
+                        <span class="text-slate-500">外网 IPv4 地址:</span>
+                        <span id="audit-ip" class="text-white font-bold">正在检测...</span>
+                    </div>
+                    <div class="flex justify-between p-2.5 bg-slate-950 rounded-lg border border-slate-800/40">
+                        <span class="text-slate-500">内网/虚拟地址:</span>
+                        <span id="audit-local-ip" class="text-slate-300">获取中...</span>
+                    </div>
+                    <div class="flex justify-between p-2.5 bg-slate-950 rounded-lg border border-slate-800/40 sm:col-span-2">
+                        <span class="text-slate-500">运营商名称 (ASN):</span>
+                        <span id="audit-isp" class="text-blue-400 font-semibold text-right">正在识别基础设施...</span>
+                    </div>
+                    <div class="flex justify-between p-2.5 bg-slate-950 rounded-lg border border-slate-800/40 sm:col-span-2">
+                        <span class="text-slate-500">物理位置地理特征:</span>
+                        <span id="audit-geo" class="text-slate-300 text-right">正在解算坐标...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800/80 rounded-3xl p-5 shadow-xl space-y-4">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-2">🛡️ 网络属性纯净度与安全审计 (Risk & Profile)</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 font-mono text-xs">
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/40 text-center">
+                        <div class="text-slate-500 text-[10px] mb-1">网络宿主分类</div>
+                        <div id="audit-type" class="font-bold text-white">未知</div>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/40 text-center">
+                        <div class="text-slate-500 text-[10px] mb-1">IP 属性纯净度</div>
+                        <div id="audit-clean" class="font-bold text-white">未知</div>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/40 text-center col-span-2 sm:col-span-1">
+                        <div class="text-slate-500 text-[10px] mb-1">安全威胁等级</div>
+                        <div id="audit-risk" class="font-bold text-white">未知</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-slate-900/80 border border-emerald-950/60 rounded-3xl p-5 shadow-xl space-y-3">
+                    <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center">
+                        <span class="mr-1.5">🟢</span> 专家推荐级业务场景 (Recommended)
+                    </h4>
+                    <ul id="audit-suggest-yes" class="space-y-2 text-xs text-slate-300 font-mono list-disc list-inside">
+                        <li>等待对网络执行首轮全维资产审计扫描...</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-900/80 border border-rose-950/60 rounded-3xl p-5 shadow-xl space-y-3">
+                    <h4 class="text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center">
+                        <span class="mr-1.5">🔴</span> 高危不推荐行为告警 (Not Recommended)
+                    </h4>
+                    <ul id="audit-suggest-no" class="space-y-2 text-xs text-slate-300 font-mono list-disc list-inside">
+                        <li>等待对网络执行首轮全维资产审计扫描...</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
     </main>
 
-    <footer class="p-4 text-center text-xs text-slate-600 border-t border-slate-900">
-        開源免費專案 • 沒有任何追蹤器與廣告
+    <footer class="p-4 text-center text-[11px] text-slate-600 border-t border-slate-900 font-mono bg-slate-950">
+        OmniSpeed Pro • 100+ 网络元数据轻量级全量审计工具 • 零广告注入 • 无持久化追踪
     </footer>
 
     <script src="app.js"></script>
