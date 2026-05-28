@@ -293,8 +293,3 @@ function setBadge(idx, type, text) {
   el.className = `badge badge-${type}`;
   el.textContent = text;
 }
-JSEOF
-echo "done"
-Output
-
-done
