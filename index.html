@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniSpeed Pro - 矩陣式獨立審計系統</title>
+    <title>OmniSpeed Pro - 50大站獨立審計系統</title>
     <style>
         :root { 
             --bg-color: #0b0f19; 
@@ -24,7 +24,7 @@
         .header-area h1 { margin: 0 0 5px 0; font-size: 2.2rem; letter-spacing: 1px; }
         .header-area p { color: #9ca3af; margin: 0; font-size: 0.95rem; }
 
-        /* 主體響應式佈局：左邊表格矩陣，右邊懸浮測速儀 */
+        /* 主體佈局 */
         .main-layout { 
             display: grid; 
             grid-template-columns: 1fr 380px; 
@@ -39,10 +39,9 @@
             .side-panel { position: static !important; }
         }
 
-        /* 左側矩陣區域 */
         .matrix-area { width: 100%; }
 
-        /* 右側固定懸浮 Fast 面板 */
+        /* 右側懸浮面板 */
         .side-panel { 
             position: sticky; 
             top: 20px; 
@@ -59,7 +58,7 @@
             border: 1px solid #24324f; 
         }
 
-        /* 🚀 核心：仿 Fast.com 獨立儀表盤樣式 */
+        /* 🚀 Fast 風格儀表盤 */
         .fast-dashboard { 
             display: flex; 
             flex-direction: column; 
@@ -67,7 +66,7 @@
             justify-content: center; 
             text-align: center; 
             position: relative;
-            min-height: 280px;
+            min-height: 300px;
         }
         .target-indicator {
             font-size: 0.9rem;
@@ -79,51 +78,79 @@
             font-weight: bold;
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
-        .fast-circle {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            border: 4px solid #24324f;
+        
+        /* 數字與重新測速按鈕的組合區域 */
+        .fast-speed-area {
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 15px;
             margin-bottom: 15px;
-            position: relative;
-            transition: border-color 0.3s;
         }
-        .fast-circle.running {
-            border-color: var(--primary);
-            animation: pulse 1.5s infinite;
-        }
+
         .speed-display { 
-            font-size: 3.8rem; 
+            font-size: 4.2rem; 
             font-weight: 800; 
             color: var(--text-main); 
             line-height: 1; 
             font-variant-numeric: tabular-nums; 
         }
-        .unit { font-size: 1.1rem; color: #9ca3af; font-weight: 400; margin-top: 2px; }
+        .unit-area {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .unit { font-size: 1.2rem; color: #9ca3af; font-weight: 400; }
         
-        .progress-container { width: 100%; background: #24324f; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 5px; }
+        /* 🔄 右側主面板的仿 Fast 重新測速按鈕 */
+        .fast-reload-btn {
+            background: transparent;
+            border: 2px solid #3b82f6;
+            color: #3b82f6;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+            margin-top: 5px;
+        }
+        .fast-reload-btn:hover {
+            background: #3b82f6;
+            color: white;
+            transform: rotate(180deg);
+        }
+        .fast-reload-btn.spinning {
+            animation: fast-spin 1s infinite linear;
+            border-color: #4b5563;
+            color: #4b5563;
+            pointer-events: none;
+        }
+
+        .progress-container { width: 100%; background: #24324f; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 10px; }
         .progress-bar { width: 0%; height: 100%; background: var(--primary); transition: width 0.1s ease; }
         
         /* 大廠分類板塊 */
-        .category-card { background: #111827; border: 1px solid #1f293d; border-radius: 14px; padding: 18px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .category-card { background: #111827; border: 1px solid #1f293d; border-radius: 14px; padding: 18px; margin-bottom: 20px; }
         .category-title { font-size: 1.15rem; color: #f43f5e; font-weight: bold; margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #311d27; }
         
-        /* 表格與行內獨立按鈕 */
+        /* 表格結構加固 */
         .table-wrapper { overflow-x: auto; width: 100%; }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
-        th, td { padding: 10px 8px; border-bottom: 1px solid #1f293d; font-size: 0.85rem; vertical-align: middle; }
+        table { width: 100%; border-collapse: collapse; text-align: left; table-layout: fixed; }
+        th, td { padding: 12px 8px; border-bottom: 1px solid #1f293d; font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         th { color: #9ca3af; font-weight: 500; background: #151d30; }
         
-        /* 專屬行內手動測速按鈕 */
+        /* ⚡ 表格每一行的「重新測速」按鈕 - 強制顯現 */
         .single-test-btn {
             background: #1e293b;
             color: #3b82f6;
-            border: 1px solid #3b82f640;
-            padding: 5px 10px;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            padding: 6px 12px;
             font-size: 0.75rem;
             font-weight: bold;
             border-radius: 6px;
@@ -131,22 +158,24 @@
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 3px;
+            justify-content: center;
+            gap: 4px;
+            min-width: 90px; /* 強制寬度，防止被擠壓看不見 */
+            box-sizing: border-box;
         }
-        .single-test-btn:hover { background: #3b82f6; color: white; transform: scale(1.05); }
-        .single-test-btn:disabled { background: #1f293d; color: #4b5563; border-color: transparent; cursor: not-allowed; transform: none; }
+        .single-test-btn:hover { background: #3b82f6; color: white; }
+        .single-test-btn:disabled { background: #1f293d; color: #4b5563; border-color: transparent; cursor: not-allowed; }
 
         /* 標籤狀態 */
-        .status-badge { padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; display: inline-block; }
+        .status-badge { padding: 3px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; display: inline-block; }
         .pending { background: #3b82f620; color: #60a5fa; }
         .success { background: #22c55e20; color: #4ade80; }
         .danger { background: #ef444420; color: #f87171; }
         .warning { background: #f59e0b20; color: #fbbf24; }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        @keyframes fast-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -165,15 +194,18 @@
         <div class="side-panel">
             
             <div class="card fast-dashboard">
-                <div class="target-indicator" id="current-target">當前觀測節點: 全局基準</div>
+                <div class="target-indicator" id="current-target">當前觀測節點: 預設基準 (Cloudflare)</div>
                 
-                <div class="fast-circle" id="dashboard-circle">
+                <div class="fast-speed-area">
                     <div class="speed-display" id="speed-number">0.0</div>
-                    <div class="unit">Mbps</div>
+                    <div class="unit-area">
+                        <div class="unit">Mbps</div>
+                        <button class="fast-reload-btn" id="main-reload-btn" onclick="triggerMainReload()" title="重新測速當前節點">🔄</button>
+                    </div>
                 </div>
                 
                 <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
-                <div id="test-status" style="margin-top: 12px; color: #9ca3af; font-size: 0.8rem;">請在左側點擊任意站點右側的 ⚡測速 按鈕</div>
+                <div id="test-status" style="margin-top: 15px; color: #9ca3af; font-size: 0.8rem;">請在左側點擊任意站點右側的 ⚡重新測速 按鈕</div>
             </div>
 
             <div class="card" style="padding: 20px;">
