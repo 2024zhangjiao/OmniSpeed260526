@@ -3,69 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniSpeed Pro - 全球頂級網站矩陣審計</title>
+    <title>OmniSpeed Pro - 矩陣式獨立審計系統</title>
     <style>
-        :root { --bg-color: #0b0f19; --card-bg: #151d30; --text-main: #f3f4f6; --accent: #22c55e; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-color); color: var(--text-main); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        .container { max-width: 1200px; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; margin-top: 15px; }
-        .card { background: var(--card-bg); padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid #24324f; }
+        :root { 
+            --bg-color: #0b0f19; 
+            --card-bg: #151d30; 
+            --text-main: #f3f4f6; 
+            --accent: #22c55e; 
+            --primary: #3b82f6;
+        }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background: var(--bg-color); 
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 20px; 
+        }
         
-        /* Fast.com 模塊 */
-        .fast-section { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        .speed-display { font-size: 5rem; font-weight: 800; color: var(--text-main); line-height: 1; margin: 15px 0; font-variant-numeric: tabular-nums; }
-        .unit { font-size: 1.5rem; color: #9ca3af; font-weight: 300; }
-        .progress-container { width: 100%; background: #24324f; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 10px; }
-        .progress-bar { width: 0%; height: 100%; background: var(--accent); transition: width 0.1s ease; }
+        .header-area { text-align: center; margin-bottom: 20px; }
+        .header-area h1 { margin: 0 0 5px 0; font-size: 2.2rem; letter-spacing: 1px; }
+        .header-area p { color: #9ca3af; margin: 0; font-size: 0.95rem; }
+
+        /* 主體響應式佈局：左邊表格矩陣，右邊懸浮測速儀 */
+        .main-layout { 
+            display: grid; 
+            grid-template-columns: 1fr 380px; 
+            gap: 20px; 
+            max-width: 1600px; 
+            margin: 0 auto; 
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .side-panel { position: static !important; }
+        }
+
+        /* 左側矩陣區域 */
+        .matrix-area { width: 100%; }
+
+        /* 右側固定懸浮 Fast 面板 */
+        .side-panel { 
+            position: sticky; 
+            top: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            padding: 25px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+            border: 1px solid #24324f; 
+        }
+
+        /* 🚀 核心：仿 Fast.com 獨立儀表盤樣式 */
+        .fast-dashboard { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            position: relative;
+            min-height: 280px;
+        }
+        .target-indicator {
+            font-size: 0.9rem;
+            color: #60a5fa;
+            background: rgba(59, 130, 246, 0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .fast-circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 4px solid #24324f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            position: relative;
+            transition: border-color 0.3s;
+        }
+        .fast-circle.running {
+            border-color: var(--primary);
+            animation: pulse 1.5s infinite;
+        }
+        .speed-display { 
+            font-size: 3.8rem; 
+            font-weight: 800; 
+            color: var(--text-main); 
+            line-height: 1; 
+            font-variant-numeric: tabular-nums; 
+        }
+        .unit { font-size: 1.1rem; color: #9ca3af; font-weight: 400; margin-top: 2px; }
         
-        /* IP.sb 模塊 */
-        .ip-sb-section h2 { margin-top: 0; color: #60a5fa; font-size: 1.3rem; border-bottom: 1px solid #24324f; padding-bottom: 10px; }
-        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 0.95rem; }
-        .info-row span:first-child { color: #9ca3af; }
-        .info-row span:last-child { font-weight: 600; text-align: right; color: #e5e7eb; }
+        .progress-container { width: 100%; background: #24324f; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 5px; }
+        .progress-bar { width: 0%; height: 100%; background: var(--primary); transition: width 0.1s ease; }
         
-        /* 全球網站分類大板塊 */
-        .matrix-section { grid-column: 1 / -1; width: 100%; margin-top: 10px; }
-        .category-card { background: #111827; border: 1px solid #1f293d; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .category-title { font-size: 1.2rem; color: #f43f5e; font-weight: bold; margin: 0 0 12px 0; padding-bottom: 6px; border-bottom: 2px solid #311d27; display: flex; align-items: center; gap: 8px; }
+        /* 大廠分類板塊 */
+        .category-card { background: #111827; border: 1px solid #1f293d; border-radius: 14px; padding: 18px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .category-title { font-size: 1.15rem; color: #f43f5e; font-weight: bold; margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #311d27; }
         
-        /* 表格優化 */
+        /* 表格與行內獨立按鈕 */
         .table-wrapper { overflow-x: auto; width: 100%; }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 550px; }
-        th, td { padding: 10px; border-bottom: 1px solid #1f293d; font-size: 0.85rem; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
+        th, td { padding: 10px 8px; border-bottom: 1px solid #1f293d; font-size: 0.85rem; vertical-align: middle; }
         th { color: #9ca3af; font-weight: 500; background: #151d30; }
         
-        /* 標籤樣式 */
-        .status-badge { padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+        /* 專屬行內手動測速按鈕 */
+        .single-test-btn {
+            background: #1e293b;
+            color: #3b82f6;
+            border: 1px solid #3b82f640;
+            padding: 5px 10px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .single-test-btn:hover { background: #3b82f6; color: white; transform: scale(1.05); }
+        .single-test-btn:disabled { background: #1f293d; color: #4b5563; border-color: transparent; cursor: not-allowed; transform: none; }
+
+        /* 標籤狀態 */
+        .status-badge { padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; display: inline-block; }
         .pending { background: #3b82f620; color: #60a5fa; }
         .success { background: #22c55e20; color: #4ade80; }
         .danger { background: #ef444420; color: #f87171; }
         .warning { background: #f59e0b20; color: #fbbf24; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
     </style>
 </head>
 <body>
 
-    <h1 style="margin: 10px 0 5px 0; font-size: 2rem;">OmniSpeed Pro</h1>
-    <p style="color: #9ca3af; margin: 0; font-size: 0.9rem; text-align: center;">Fast 測速內核 + IP.sb 路由審計 + 全球 50 大站分類探針矩陣</p>
+    <div class="header-area">
+        <h1>OmniSpeed Pro</h1>
+        <p>全球 50 大站獨立節點審計集群 · 支援單站手動 Fast 內核模擬測速</p>
+    </div>
 
-    <div class="container">
-        <div class="card fast-section">
-            <div style="font-size: 1rem; color: #9ca3af;">真實下載速度 (Cloudflare 邊緣節點)</div>
-            <div class="speed-display"><span id="speed-number">0.0</span><span class="unit"> Mbps</span></div>
-            <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
-            <div id="test-status" style="margin-top: 12px; color: #9ca3af; font-size: 0.85rem;">正在初始化測速環境...</div>
-        </div>
-
-        <div class="card ip-sb-section">
-            <h2>網絡身份與路由屬性</h2>
-            <div class="info-row"><span>公網 IP 地址</span><span id="ip-value">檢測中...</span></div>
-            <div class="info-row"><span>核心運營商 (ISP)</span><span id="isp-value">檢測中...</span></div>
-            <div class="info-row"><span>自主系統號 (ASN)</span><span id="asn-value">檢測中...</span></div>
-            <div class="info-row"><span>地理位置區域</span><span id="location-value">檢測中...</span></div>
-            <div class="info-row"><span>基準連通時延</span><span id="ping-value">測試中...</span></div>
-        </div>
-
-        <div class="matrix-section" id="matrix-container">
+    <div class="main-layout">
+        
+        <div class="matrix-area" id="matrix-container">
             </div>
+
+        <div class="side-panel">
+            
+            <div class="card fast-dashboard">
+                <div class="target-indicator" id="current-target">當前觀測節點: 全局基準</div>
+                
+                <div class="fast-circle" id="dashboard-circle">
+                    <div class="speed-display" id="speed-number">0.0</div>
+                    <div class="unit">Mbps</div>
+                </div>
+                
+                <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+                <div id="test-status" style="margin-top: 12px; color: #9ca3af; font-size: 0.8rem;">請在左側點擊任意站點右側的 ⚡測速 按鈕</div>
+            </div>
+
+            <div class="card" style="padding: 20px;">
+                <h3 style="margin: 0 0 12px 0; color: #60a5fa; font-size: 1.1rem; border-bottom: 1px solid #24324f; padding-bottom: 8px;">網路身份與路由屬性</h3>
+                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1e293b; font-size: 0.85rem;"><span style="color:#9ca3af;">公網 IP 地址</span><span id="ip-value">自動解析中...</span></div>
+                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1e293b; font-size: 0.85rem;"><span style="color:#9ca3af;">運營商 (ISP)</span><span id="isp-value">自動解析中...</span></div>
+                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1e293b; font-size: 0.85rem;"><span style="color:#9ca3af;">地理位置區域</span><span id="location-value">自動解析中...</span></div>
+            </div>
+
+        </div>
+
     </div>
 
     <script src="app.js"></script>
