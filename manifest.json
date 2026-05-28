@@ -1,4 +1,3 @@
-cat > /mnt/user-data/outputs/manifest.json << 'EOF'
 {
   "short_name": "OmniSpeed",
   "name": "OmniSpeed Pro - 全维度网络审计中心",
