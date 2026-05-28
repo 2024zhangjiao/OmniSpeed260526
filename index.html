@@ -11,6 +11,7 @@
             --text-main: #f3f4f6; 
             --accent: #22c55e; 
             --primary: #3b82f6;
+            --border-color: #24324f;
         }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
@@ -25,14 +26,14 @@
         .header-area h1 { margin: 0 0 10px 0; font-size: 2.2rem; }
         .header-area p { color: #9ca3af; margin: 0; font-size: 0.95rem; }
 
-        /* 頂部雙卡片並排佈局 */
+        /* ⚖️ 頂部雙卡片 50% : 50% 絕對平均分配區域 */
         .top-dashboards {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin-bottom: 30px;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .top-dashboards { grid-template-columns: 1fr; }
         }
 
@@ -41,95 +42,175 @@
             padding: 30px; 
             border-radius: 16px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
-            border: 1px solid #24324f; 
+            border: 1px solid var(--border-color); 
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 380px; /* 鎖定高度使兩側完全等高對稱 */
         }
 
-        /* 🎯 Fast 核心測速數字與按鈕區域 */
-        .fast-dashboard {
+        /* 🎯 左側 Fast 風格核心測速區域 */
+        .fast-style-container {
+            text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
+            flex-grow: 1;
         }
-        .speed-box {
-            display: inline-flex;
-            align-items: center;
+
+        .target-title {
+            color: #60a5fa;
+            font-weight: bold;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        /* 主下載速度大字 */
+        .main-speed-row {
+            display: flex;
+            align-items: flex-end;
             justify-content: center;
-            gap: 15px; /* 數字、單位與按鈕之間的間距 */
-            margin: 20px 0;
-            position: relative;
+            gap: 10px;
+            margin: 10px 0;
         }
-        .speed-display { 
-            font-size: 5rem; 
-            font-weight: 800; 
-            color: var(--text-main); 
+
+        .huge-speed {
+            font-size: 5.5rem;
+            font-weight: 700;
+            color: var(--text-main);
             line-height: 1;
         }
-        .unit-box {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        .unit { font-size: 1.4rem; color: #9ca3af; font-weight: 500; }
 
-        /* 🔄 右側主數字旁邊的仿 Fast 重新測速按鈕 */
-        .fast-reload-btn {
+        .huge-unit-box {
+            text-align: left;
+            padding-bottom: 10px;
+        }
+
+        .huge-unit {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--text-main);
+            display: block;
+        }
+
+        /* 🔘 Start / 重新測速控制按鈕 */
+        .start-btn {
             background: transparent;
-            border: 2px solid #3b82f6;
-            color: #3b82f6;
-            width: 38px;
-            height: 38px;
+            border: 2px solid #22c55e;
+            color: #22c55e;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-top: 5px;
             padding: 0;
-            margin-left: 5px;
         }
-        .fast-reload-btn:hover {
-            background: #3b82f6;
-            color: white;
-            transform: rotate(180deg);
+        .start-btn:hover {
+            background: #22c55e;
+            color: #151d30;
+            transform: scale(1.05);
         }
-        .fast-reload-btn.spinning {
+        .start-btn.running {
             animation: fast-spin 1s infinite linear;
             border-color: #4b5563;
             color: #4b5563;
             pointer-events: none;
         }
 
-        .progress-container { width: 80%; background: #24324f; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 10px; }
+        /* 進度條 */
+        .progress-container { width: 90%; background: #24324f; height: 4px; border-radius: 2px; overflow: hidden; margin: 15px 0; }
         .progress-bar { width: 0%; height: 100%; background: var(--accent); transition: width 0.1s ease; }
+
+        /* 📊 照抄 Fast 下方的多指標數據網格 */
+        .fast-metrics-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 15px;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .metric-col {
+            padding: 0 15px;
+        }
+        .metric-col:first-child {
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .metric-sub-flex {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .sub-item-block {
+            flex: 1;
+        }
+
+        .sub-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            display: block;
+        }
+
+        .sub-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .sub-unit {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #9ca3af;
+            margin-left: 2px;
+        }
+
+        /* 右側路由屬性列表列表樣式 */
+        .route-list {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+        .route-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #1e293b;
+            font-size: 0.95rem;
+        }
+        .route-item:last-child { border-bottom: none; }
+        .route-label { color: #9ca3af; }
+        .route-val { font-weight: 600; color: var(--text-main); }
+
+        /* 下方大站矩陣 */
+        .category-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .category-title { font-size: 1.2rem; color: #f43f5e; font-weight: bold; margin: 0 0 15px 0; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
         
-        /* 下方 50 大站分類矩陣面板 */
-        .category-card { background: var(--card-bg); border: 1px solid #24324f; border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .category-title { font-size: 1.2rem; color: #f43f5e; font-weight: bold; margin: 0 0 15px 0; padding-bottom: 10px; border-bottom: 1px solid #24324f; }
-        
-        /* 表格結構優化 */
         .table-wrapper { overflow-x: auto; width: 100%; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 14px 12px; border-bottom: 1px solid #1f293d; font-size: 0.9rem; }
         th { color: #9ca3af; font-weight: 500; background: #111827; }
         
-        /* ⚡ 表格每一行尾部的獨立「重新測速」按鈕 */
         .single-test-btn {
-            background: #1e293b;
-            color: #3b82f6;
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            padding: 6px 14px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 95px; /* 鎖定最小寬度，防止文字擠壓 */
+            background: #1e293b; color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.4);
+            padding: 6px 14px; font-size: 0.8rem; font-weight: bold; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; min-width: 95px; text-align: center;
         }
         .single-test-btn:hover { background: #3b82f6; color: white; }
         .single-test-btn:disabled { background: #1f293d; color: #4b5563; border-color: transparent; cursor: not-allowed; }
@@ -151,31 +232,68 @@
     <div class="container">
         <div class="header-area">
             <h1>OmniSpeed Pro</h1>
-            <p>Fast 測速內核 + IP.sb 路由審計 · 全球 50 大站分組探針矩陣</p>
+            <p>Fast 內核架構 + 全球 50 大站多指標分組審計矩陣</p>
         </div>
 
         <div class="top-dashboards">
-            <div class="card fast-dashboard">
-                <div style="color: #60a5fa; font-weight: bold; font-size: 0.95rem;" id="current-target">真實下載速度 (Cloudflare 邊緣節點)</div>
-                
-                <div class="speed-box">
-                    <div class="speed-display" id="speed-number">0.0</div>
-                    <div class="unit-box">
-                        <div class="unit">Mbps</div>
+            
+            <div class="card">
+                <div class="fast-style-container">
+                    <div class="target-title" id="current-target">Your Internet speed is</div>
+                    
+                    <div class="main-speed-row">
+                        <div class="huge-speed" id="download-value">0</div>
+                        <div class="huge-unit-box">
+                            <span class="huge-unit">Mbps</span>
+                            <button class="start-btn" id="start-action-btn" onclick="triggerMainSpeedTest()" title="開始重新測速">↻</button>
+                        </div>
                     </div>
-                    <button class="fast-reload-btn" id="main-reload-btn" onclick="triggerMainReload()" title="重新測速當前目標">🔄</button>
+                    
+                    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+                    <div id="test-status-msg" style="color: #9ca3af; font-size: 0.8rem; margin-bottom: 5px;">點擊按鈕或下方站點開始審計</div>
+
+                    <div class="fast-metrics-grid">
+                        <div class="metric-col">
+                            <div class="metric-label">Latency (時延)</div>
+                            <div class="metric-sub-flex">
+                                <div class="sub-item-block">
+                                    <span class="sub-label">Unloaded</span>
+                                    <span class="sub-value" id="latency-unloaded">--</span><span class="sub-unit">ms</span>
+                                </div>
+                                <div class="sub-item-block">
+                                    <span class="sub-label">Loaded</span>
+                                    <span class="sub-value" id="latency-loaded">--</span><span class="sub-unit">ms</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-col">
+                            <div class="metric-label">Upload & Loss</div>
+                            <div class="metric-sub-flex">
+                                <div class="sub-item-block">
+                                    <span class="sub-label">Speed</span>
+                                    <span class="sub-value" id="upload-value">--</span><span class="sub-unit">Mbps</span>
+                                </div>
+                                <div class="sub-item-block">
+                                    <span class="sub-label">Loss (丟包)</span>
+                                    <span class="sub-value" id="loss-value">--</span><span class="sub-unit">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                
-                <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
-                <div id="test-status" style="margin-top: 12px; color: #9ca3af; font-size: 0.8rem;">正在選取節點...</div>
             </div>
 
-            <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
-                <h3 style="margin: 0 0 15px 0; color: #60a5fa; font-size: 1.1rem; border-bottom: 1px solid #24324f; padding-bottom: 8px;">網絡身份與路由屬性</h3>
-                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1e293b;"><span style="color:#9ca3af;">公網 IP 地址</span><span id="ip-value" style="font-weight:bold;">60.172.44.29</span></div>
-                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1e293b;"><span style="color:#9ca3af;">核心運營商 (ISP)</span><span id="isp-value">Chinanet</span></div>
-                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1e293b;"><span style="color:#9ca3af;">自主系統號 (ASN)</span><span id="asn-value">AS4134</span></div>
-                <div style="display: flex; justify-content: space-between; padding: 10px 0;"><span style="color:#9ca3af;">地理位置區域</span><span id="location-value">China - Anhui</span></div>
+            <div class="card">
+                <div class="route-list">
+                    <h3 style="margin: 0 0 20px 0; color: #60a5fa; font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">網絡身份與路由屬性</h3>
+                    <div class="route-item"><span class="route-label">公網 IP 地址</span><span class="route-val" id="ip-value">60.172.44.29</span></div>
+                    <div class="route-item"><span class="route-label">核心運營商 (ISP)</span><span class="route-val" id="isp-value">Chinanet</span></div>
+                    <div class="route-item"><span class="route-label">自主系統號 (ASN)</span><span class="route-val" id="asn-value">AS4134</span></div>
+                    <div class="route-item"><span class="route-label">地理位置區域</span><span class="route-val" id="location-value">China - Anhui</span></div>
+                    <div class="route-item"><span class="route-label">基準連通時延</span><span class="route-val" id="base-latency-value" style="color:#4ade80;">24ms</span></div>
+                </div>
             </div>
         </div>
 
