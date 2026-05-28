@@ -29,5 +29,3 @@
   "orientation": "portrait",
   "categories": ["utilities", "productivity"]
 }
-EOF
-echo "ok" 
