@@ -1,18 +1,34 @@
+cat > /mnt/user-data/outputs/manifest.json << 'EOF'
 {
   "short_name": "OmniSpeed",
-  "name": "OmniSpeed Pro - 全維度網絡審計中心",
-  "description": "融合 Fast 下載內核與 IP.sb 路由屬性審計，提供全球 Top 50 站點多重探針矩陣。",
+  "name": "OmniSpeed Pro - 全维度网络审计中心",
+  "description": "融合 Fast 下载内核与 IP.sb 路由属性审计，提供全球 Top 50 站点多重探针矩阵。",
   "icons": [
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
+    },
+    {
+      "src": "https://via.placeholder.com/192x192/0969da/ffffff?text=OS",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/0969da/ffffff?text=OS",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "/OmniSpeed260526/index.html",
+  "scope": "/OmniSpeed260526/",
   "display": "standalone",
-  "theme_color": "#0b0f19",
-  "background_color": "#0b0f19",
+  "theme_color": "#0969da",
+  "background_color": "#ffffff",
   "orientation": "portrait",
   "categories": ["utilities", "productivity"]
 }
+EOF
+echo "ok" 
