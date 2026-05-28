@@ -1,17 +1,18 @@
 {
-  "name": "OmniSpeed Pro 網路審計",
   "short_name": "OmniSpeed",
-  "description": "一款純淨、開源、無廣告的全維度網路資產與風控審計看板。",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#020617",
-  "theme_color": "#020617",
-  "orientation": "portrait",
+  "name": "OmniSpeed Pro - 全維度網絡審計中心",
+  "description": "融合 Fast 下載內核與 IP.sb 路由屬性審計，提供全球 Top 50 站點多重探針矩陣。",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/825/825590.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
     }
-  ]
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#0b0f19",
+  "background_color": "#0b0f19",
+  "orientation": "portrait",
+  "categories": ["utilities", "productivity"]
 }
